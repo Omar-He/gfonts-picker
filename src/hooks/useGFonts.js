@@ -13,7 +13,7 @@ export default function useGFonts() {
       getFonts();
     }
 
-    if (viewedIndex && filteredFonts.length > 0) {
+    if (viewedIndex && filteredFonts?.length > 0) {
       const { startIndex, stopIndex } = viewedIndex;
       const renderedFonts = filteredFonts.slice(startIndex, stopIndex + 1);
       document
@@ -38,26 +38,28 @@ export default function useGFonts() {
         });
       }
     }
-  }, [viewedIndex]);
+  }, [viewedIndex, filteredFonts]);
 
   useEffect(() => {
     const newFonts = allGoogleFonts?.filter(
       (font) => font.family.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1
     );
-    console.log(newFonts);
     searchTerm ? setFilteredFonts(newFonts) : setFilteredFonts(allGoogleFonts);
   }, [searchTerm]);
-
-  const getFonts = async () => {
-    const gFonts = await fetchFontsJSON();
-    setFilteredFonts(gFonts.items);
-    setAllGoogleFonts(gFonts.items);
-  };
 
   const fontSearch = (value) => {
     setTimeout(() => {
       setSearchTerm(value);
     }, 100);
+  };
+
+  const getFonts = async () => {
+    const gFonts = await fetchFontsJSON();
+    const newData = gFonts.items.map((font, key) => {
+      return { ...font, label: font.family, value: key };
+    });
+    setFilteredFonts(newData);
+    setAllGoogleFonts(newData);
   };
 
   return {

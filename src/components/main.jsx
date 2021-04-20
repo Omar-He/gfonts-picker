@@ -18,7 +18,7 @@ function Main() {
         />
       </div>
       <div className="list-container">
-        {filteredFonts && (
+        {filteredFonts ? (
           <List
             className="virtual-list"
             width={600}
@@ -49,6 +49,8 @@ function Main() {
               setViewedIndex({ startIndex, stopIndex });
             }}
           />
+        ) : (
+          <span>Loading ...</span>
         )}
       </div>
     </div>
