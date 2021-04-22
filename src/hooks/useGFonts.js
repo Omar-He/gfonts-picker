@@ -10,7 +10,7 @@ export default function useGFonts() {
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    if (!allGoogleFonts && apiKey) {
+    if (!allGoogleFonts) {
       getFonts();
     }
 
