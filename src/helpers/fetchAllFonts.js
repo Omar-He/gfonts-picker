@@ -1,8 +1,9 @@
-export async function fetchFontsJSON() {
+export async function fetchFontsJSON(apiKey) {
   const response = await fetch(
-    "https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyCBbPyJ2U8SgyZkxnxJki68iwceRLa76K8"
+    `https://www.googleapis.com/webfonts/v1/webfonts?key=${apiKey}`
   );
   const googleFonts = await response.json();
   return googleFonts;
 }
 
+//AIzaSyCBbPyJ2U8SgyZkxnxJki68iwceRLa76K8

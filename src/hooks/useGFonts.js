@@ -3,13 +3,14 @@ import { fetchFontsJSON } from "../helpers/fetchAllFonts";
 import WebFont from "webfontloader";
 
 export default function useGFonts() {
+  const [apiKey, setApiKey] = useState("");
   const [allGoogleFonts, setAllGoogleFonts] = useState();
   const [filteredFonts, setFilteredFonts] = useState([]);
   const [viewedIndex, setViewedIndex] = useState({});
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    if (!allGoogleFonts) {
+    if (!allGoogleFonts && apiKey) {
       getFonts();
     }
 
@@ -38,7 +39,7 @@ export default function useGFonts() {
         });
       }
     }
-  }, [viewedIndex, filteredFonts]);
+  }, [viewedIndex, filteredFonts, apiKey]);
 
   useEffect(() => {
     const newFonts = allGoogleFonts?.filter(
@@ -54,17 +55,18 @@ export default function useGFonts() {
   };
 
   const getFonts = async () => {
-    const gFonts = await fetchFontsJSON();
-    const newData = gFonts.items.map((font, key) => {
+    const gFonts = await fetchFontsJSON(apiKey);
+    const newData = gFonts?.items?.map((font, key) => {
       return { ...font, label: font.family, value: key };
     });
-    setFilteredFonts(newData);
-    setAllGoogleFonts(newData);
+    setFilteredFonts(newData || []);
+    setAllGoogleFonts(newData || []);
   };
 
   return {
     filteredFonts,
     fontSearch,
     setViewedIndex,
+    setApiKey,
   };
 }

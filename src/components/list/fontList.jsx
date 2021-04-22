@@ -1,11 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { List } from "react-virtualized";
-import useGFonts from "../hooks/useGFonts";
-import "../styles/main.scss";
+import useGFonts from "../../hooks/useGFonts";
+import "./fontList.scss";
 
-function Main() {
-  const { filteredFonts, fontSearch, setViewedIndex } = useGFonts();
+function FontList({ apiKey, selectedFont }) {
+  const { setApiKey, filteredFonts, fontSearch, setViewedIndex } = useGFonts();
 
+  useEffect(() => {
+    setApiKey(apiKey);
+  }, [apiKey]);
+
+  const onSelectFont = (font) => {
+    selectedFont(font);
+  };
   return (
     <div className="main-container">
       Hello Google fonts
@@ -30,9 +37,7 @@ function Main() {
               return (
                 <div key={key} style={style}>
                   <span
-                    onClick={() => {
-                      console.log(font);
-                    }}
+                    onClick={() => onSelectFont(font)}
                     className="font-name"
                   >
                     {index + 1}- {font.family}
@@ -57,4 +62,4 @@ function Main() {
   );
 }
 
-export default Main;
+export default FontList;
