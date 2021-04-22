@@ -1,4 +1,10 @@
-# Getting Started with Create React App
+# Google fonts picker
+
+A tool that previews all Google fonts by efficiently rendering without the need to add all fonts stylesheets to the web page, also allows you to select one of these fonts and use it in your application.
+
+This tool uses [webfontloader](https://www.npmjs.com/package/webfontloader), [react-virtualized](https://www.npmjs.com/package/react-virtualized) and [react-virtualized-select](https://www.npmjs.com/package/react-virtualized-select).
+
+<!-- # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -67,4 +73,4 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 
 ### `yarn build` fails to minify
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify) -->
