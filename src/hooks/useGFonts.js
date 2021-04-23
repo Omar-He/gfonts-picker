@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { fetchFontsJSON } from "../helpers/fetchAllFonts";
-import WebFont from "webfontloader";
+import { webFontLoader } from "../helpers/webFontLoader";
+import removeUnnecessaryFonts from "../helpers/fontsRemover";
 
 export default function useGFonts() {
   const [apiKey, setApiKey] = useState("");
@@ -17,26 +18,9 @@ export default function useGFonts() {
     if (viewedIndex && filteredFonts?.length > 0) {
       const { startIndex, stopIndex } = viewedIndex;
       const renderedFonts = filteredFonts.slice(startIndex, stopIndex + 1);
-      document
-        .querySelectorAll('style,link[rel="stylesheet"]')
-        .forEach((item) => {
-          const found = renderedFonts.find((font) => {
-            const regex = new RegExp(font.family, "g");
-            const fontToFind = item.href?.match(regex);
-            if (fontToFind) return font.family === fontToFind[0];
-            return null;
-          });
-          const googleFont = item.href?.match(/fonts.googleapis.com/g);
-          if (!found && googleFont) item.remove();
-        });
+      removeUnnecessaryFonts(renderedFonts);
       if (renderedFonts.length > 0) {
-        WebFont.load({
-          classes: false,
-          events: false,
-          google: {
-            families: renderedFonts?.map((i) => i.family),
-          },
-        });
+        webFontLoader(renderedFonts);
       }
     }
   }, [viewedIndex, filteredFonts, apiKey]);

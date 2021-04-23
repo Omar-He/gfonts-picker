@@ -5,11 +5,12 @@ import Select from "react-virtualized-select";
 import React, { useState, useEffect } from "react";
 import useGFonts from "../../hooks/useGFonts";
 import createClassNames from "classnames";
+import removeUnnecessaryFonts from "../../helpers/fontsRemover";
 
 const FontSelector = ({ apiKey, selectedFont, className }) => {
   const classes = createClassNames("FP-selector", className);
   const { setApiKey, filteredFonts, setViewedIndex, fontSearch } = useGFonts();
-  const [lastIndex, setLastIndex] = useState();
+  const [stopIndex, setStopIndex] = useState();
   const [selectedValue, setSelectedValue] = useState();
 
   useEffect(() => {
@@ -17,14 +18,15 @@ const FontSelector = ({ apiKey, selectedFont, className }) => {
   }, [apiKey]);
 
   useEffect(() => {
-    const indexCalc = lastIndex - 20;
-    const startIndex = lastIndex > 20 ? indexCalc : 0;
-    setViewedIndex({ startIndex, stopIndex: lastIndex });
-  }, [lastIndex]);
+    const indexCalc = stopIndex - 20;
+    const startIndex = stopIndex > 20 ? indexCalc : 0;
+    setViewedIndex({ startIndex, stopIndex });
+  }, [stopIndex]);
 
   const handleChange = (value) => {
     setSelectedValue(value);
     selectedFont(value);
+    removeUnnecessaryFonts([value]);
   };
   return (
     <Select
@@ -39,7 +41,7 @@ const FontSelector = ({ apiKey, selectedFont, className }) => {
       onChange={handleChange}
       onInputChange={(term) => fontSearch(term)}
       optionRenderer={({ option, style, selectValue, optionIndex }) => {
-        setLastIndex(optionIndex);
+        setStopIndex(optionIndex);
         const font = filteredFonts[optionIndex];
         return (
           <div
@@ -51,7 +53,7 @@ const FontSelector = ({ apiKey, selectedFont, className }) => {
             <span
               style={{
                 fontFamily: font.family,
-                fontSize: "12px",
+                fontSize: "18px",
                 margin: "3px",
               }}
             >
