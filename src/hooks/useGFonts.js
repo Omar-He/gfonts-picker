@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { fetchFontsJSON } from "../helpers/fetchAllFonts";
 import { webFontLoader } from "../helpers/webFontLoader";
-import removeUnnecessaryFonts from "../helpers/fontsRemover";
+import { removeUnnecessaryFonts } from "../helpers/fontsRemover";
 
 export default function useGFonts() {
   const [apiKey, setApiKey] = useState("");
@@ -11,7 +11,7 @@ export default function useGFonts() {
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    if (!allGoogleFonts) {
+    if (!allGoogleFonts && apiKey) {
       getFonts();
     }
 

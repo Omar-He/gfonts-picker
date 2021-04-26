@@ -5,19 +5,23 @@ import Select from "react-virtualized-select";
 import React, { useState, useEffect } from "react";
 import useGFonts from "../../hooks/useGFonts";
 import createClassNames from "classnames";
-import removeUnnecessaryFonts from "../../helpers/fontsRemover";
+import { removeAllFonts } from "../../helpers/fontsRemover";
 
-const FontSelector = ({ apiKey, selectedFont, className }) => {
+const FontSelector = ({ apiKey, selectedFont, className, defaultFont }) => {
   const classes = createClassNames("FP-selector", className);
   const { setApiKey, filteredFonts, setViewedIndex, fontSearch } = useGFonts();
   const [stopIndex, setStopIndex] = useState();
-  const [selectedValue, setSelectedValue] = useState();
+  const [selectedValue, setSelectedValue] = useState({ label: defaultFont });
 
   useEffect(() => {
     setApiKey(apiKey);
   }, [apiKey]);
 
   useEffect(() => {
+    if (!stopIndex) {
+      setViewedIndex({ startIndex: 0, stopIndex: 15 });
+      return;
+    }
     const indexCalc = stopIndex - 20;
     const startIndex = stopIndex > 20 ? indexCalc : 0;
     setViewedIndex({ startIndex, stopIndex });
@@ -26,17 +30,15 @@ const FontSelector = ({ apiKey, selectedFont, className }) => {
   const handleChange = (value) => {
     setSelectedValue(value);
     selectedFont(value);
-    removeUnnecessaryFonts([value]);
+    removeAllFonts();
+    setStopIndex(1);
   };
+
   return (
     <Select
+      clearable={false}
       className={classes}
       value={selectedValue}
-      styles={{
-        selectValue: (provided, state) => ({
-          fontFamily: selectedValue.family,
-        }),
-      }}
       options={filteredFonts}
       onChange={handleChange}
       onInputChange={(term) => fontSearch(term)}
@@ -53,8 +55,6 @@ const FontSelector = ({ apiKey, selectedFont, className }) => {
             <span
               style={{
                 fontFamily: font.family,
-                fontSize: "18px",
-                margin: "3px",
               }}
             >
               {font.family}

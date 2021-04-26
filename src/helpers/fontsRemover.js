@@ -12,4 +12,11 @@ function removeUnnecessaryFonts(renderedFonts) {
   });
 }
 
-export default removeUnnecessaryFonts;
+function removeAllFonts() {
+  document.querySelectorAll('style,link[rel="stylesheet"]').forEach((item) => {
+    const googleFont = item.href?.match(/fonts.googleapis.com/g);
+    if (googleFont) item.remove();
+  });
+}
+
+export { removeUnnecessaryFonts, removeAllFonts };
