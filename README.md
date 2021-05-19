@@ -15,6 +15,7 @@ Your application needs to identify itself every time it sends a request to the G
 
 
 ## Run the app
+- Install the dependencies `npm install`
 - Run the application by the following command
 `npm start`
 - Open http://localhost:6006 to view it in the browser.
