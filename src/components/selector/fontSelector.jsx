@@ -6,13 +6,13 @@ import React, { useState, useEffect } from "react";
 import useGFonts from "../../hooks/useGFonts";
 import createClassNames from "classnames";
 import { removeAllFonts } from "../../helpers/fontsRemover";
+import propTypes from "prop-types";
 
 const FontSelector = ({ apiKey, selectedFont, className, defaultFont }) => {
   const classes = createClassNames("FP-selector", className);
   const { setApiKey, filteredFonts, setViewedIndex, fontSearch } = useGFonts();
   const [stopIndex, setStopIndex] = useState();
   const [selectedValue, setSelectedValue] = useState({ label: defaultFont });
-
   useEffect(() => {
     setApiKey(apiKey);
   }, [apiKey]);
@@ -42,28 +42,52 @@ const FontSelector = ({ apiKey, selectedFont, className, defaultFont }) => {
       options={filteredFonts}
       onChange={handleChange}
       onInputChange={(term) => fontSearch(term)}
-      optionRenderer={({ option, style, selectValue, optionIndex }) => {
-        setStopIndex(optionIndex);
-        const font = filteredFonts[optionIndex];
-        return (
-          <div
-            style={style}
-            className="fp-option"
-            onClick={() => selectValue(option)}
-            key={optionIndex}
-          >
-            <span
-              style={{
-                fontFamily: font.family,
-              }}
-            >
-              {font.family}
-            </span>
-          </div>
-        );
-      }}
+      optionRenderer={(props) => (
+        <OptionRenderer
+          key={props.optionIndex}
+          {...props}
+          setStopIndex={(index) => setStopIndex(index)}
+          filteredFonts={filteredFonts}
+        />
+      )}
     />
   );
 };
 
 export default FontSelector;
+
+FontSelector.propTypes = {
+  apiKey: propTypes.string,
+  selectedFont: propTypes.func,
+  className: propTypes.string,
+  defaultFont: propTypes.string,
+};
+
+const OptionRenderer = ({
+  option,
+  style,
+  selectValue,
+  optionIndex,
+  setStopIndex,
+  filteredFonts,
+}) => {
+  useEffect(() => {
+    setStopIndex(optionIndex);
+  }, [optionIndex]);
+  const font = filteredFonts[optionIndex];
+  return (
+    <div
+      style={style}
+      className="fp-option"
+      onClick={() => selectValue(option)}
+    >
+      <span
+        style={{
+          fontFamily: font.family,
+        }}
+      >
+        {font.family}
+      </span>
+    </div>
+  );
+};
